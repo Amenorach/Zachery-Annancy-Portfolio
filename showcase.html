@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Analytics Portfolio - Interactive Showcase</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f8f8f8 0%, #f0f0f0 100%);
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            margin-bottom: 3rem;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            background: linear-gradient(135deg, #00d4d4 0%, #00a8cc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #00d4d4 0%, #00a8cc 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.875rem;
+        }
+
+        nav a {
+            margin-left: 2rem;
+            text-decoration: none;
+            color: #666;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #00d4d4;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+            padding: 3rem 0;
+        }
+
+        .hero h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero-highlight {
+            background: linear-gradient(135deg, #00d4d4 0%, #ffa500 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00d4d4 0%, #00a8cc 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 212, 212, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #00d4d4;
+            border: 2px solid #00d4d4;
+        }
+
+        .btn-secondary:hover {
+            background: #f8f8f8;
+        }
+
+        .section {
+            background: white;
+            border-radius: 1rem;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        .section-subtitle {
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-container {
+            background: #f8f8f8;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .chart-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #333;
+            font-size: 1rem;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #f8f8f8 0%, #f0f0f0 100%);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            border-left: 4px solid #00d4d4;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .metric-value {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #00d4d4;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .metric-change {
+            font-size: 0.85rem;
+            color: #51cf66;
+            margin-top: 0.5rem;
+        }
+
+        .insights-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .insight-item {
+            background: linear-gradient(135deg, #f8f8f8 0%, #f0f0f0 100%);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            border-left: 4px solid #ffa500;
+        }
+
+        .insight-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .insight-text {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .data-table thead {
+            background: #f8f8f8;
+        }
+
+        .data-table th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+            color: #666;
+        }
+
+        .data-table tr:hover {
+            background: #f8f8f8;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, rgba(0, 212, 212, 0.1) 0%, rgba(255, 165, 0, 0.1) 100%);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-title {
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-text {
+            color: #666;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: #999;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 3rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #00d4d4;
+        }
+
+        @media (max-width: 768px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav {
+                display: flex;
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            nav a {
+                margin-left: 0;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .export-btn {
+            padding: 0.5rem 1rem;
+            background: #f0f0f0;
+            border: 1px solid #e0e0e0;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .export-btn:hover {
+            background: #e0e0e0;
+            border-color: #00d4d4;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">📊</div>
+                <span>Data Analytics Showcase</span>
+            </div>
+            <nav>
+                <a href="#overview">Overview</a>
+                <a href="#performance">Performance</a>
+                <a href="#insights">Insights</a>
+                <a href="#details">Details</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero">
+            <h1>Data Analytics <span class="hero-highlight">Interactive Showcase</span></h1>
+            <p>Explore comprehensive analytics dashboards with real-time data visualization, trend analysis, and actionable business insights.</p>
+            <div class="cta-buttons">
+                <button class="btn btn-primary" onclick="exportData('csv')">📥 Export Data (CSV)</button>
+                <button class="btn btn-primary" onclick="shareReport()">🔗 Share Report</button>
+                <button class="btn btn-secondary" onclick="printReport()">🖨️ Print Report</button>
+            </div>
+        </div>
+
+        <!-- Key Metrics Section -->
+        <section class="section" id="overview">
+            <h2 class="section-title">Key Performance Metrics</h2>
+            <p class="section-subtitle">Real-time overview of critical business indicators and performance trends</p>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">$2.5M</div>
+                    <div class="metric-label">Total Revenue</div>
+                    <div class="metric-change">↑ 23% from last quarter</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">45%</div>
+                    <div class="metric-label">Growth Rate</div>
+                    <div class="metric-change">↑ 8% YoY</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">12,450</div>
+                    <div class="metric-label">Active Users</div>
+                    <div class="metric-change">↑ 3,200 new users</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">92%</div>
+                    <div class="metric-label">Satisfaction Rate</div>
+                    <div class="metric-change">↑ 5% improvement</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Charts Section -->
+        <section class="section" id="performance">
+            <h2 class="section-title">Performance Analytics</h2>
+            <p class="section-subtitle">Detailed visualization of trends, patterns, and performance indicators</p>
+            
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <div class="chart-title">📈 Revenue Trend (Last 12 Months)</div>
+                    <div class="chart-wrapper">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-title">📊 Market Share Distribution</div>
+                    <div class="chart-wrapper">
+                        <canvas id="marketChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-title">👥 Customer Segments</div>
+                    <div class="chart-wrapper">
+                        <canvas id="segmentChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-title">📉 Regional Performance</div>
+                    <div class="chart-wrapper">
+                        <canvas id="regionalChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <div class="highlight-title">💡 Key Finding</div>
+                <div class="highlight-text">Revenue growth accelerated by 23% in Q3 2024, driven primarily by the North American market which contributed 45% of total revenue. Customer acquisition costs decreased by 18% while lifetime value increased by 31%.</div>
+            </div>
+        </section>
+
+        <!-- Insights Section -->
+        <section class="section" id="insights">
+            <h2 class="section-title">Business Insights</h2>
+            <p class="section-subtitle">Data-driven recommendations and strategic observations</p>
+            
+            <ul class="insights-list">
+                <li class="insight-item">
+                    <div class="insight-title">🎯 Market Opportunity</div>
+                    <div class="insight-text">Emerging markets show 3x higher growth potential. Recommended investment allocation: 35% to Asia-Pacific, 25% to Europe.</div>
+                </li>
+                <li class="insight-item">
+                    <div class="insight-title">⚡ Performance Driver</div>
+                    <div class="insight-text">Premium tier customers generate 5x more revenue per user. Focus retention efforts on this segment to maximize lifetime value.</div>
+                </li>
+                <li class="insight-item">
+                    <div class="insight-title">🔄 Trend Analysis</div>
+                    <div class="insight-text">Seasonal patterns indicate 40% revenue spike in Q4. Prepare inventory and staffing accordingly for optimal resource allocation.</div>
+                </li>
+                <li class="insight-item">
+                    <div class="insight-title">📱 Channel Efficiency</div>
+                    <div class="insight-text">Mobile channel conversion rate improved 28% after UX redesign. Digital-first strategy showing strong ROI at 340%.</div>
+                </li>
+                <li class="insight-item">
+                    <div class="insight-title">💰 Cost Optimization</div>
+                    <div class="insight-text">Operational efficiency improvements reduced COGS by 15%. Further optimization potential identified in supply chain logistics.</div>
+                </li>
+                <li class="insight-item">
+                    <div class="insight-title">🚀 Growth Acceleration</div>
+                    <div class="insight-text">Predictive models indicate 60% revenue growth possible within 18 months with targeted marketing investments in high-potential segments.</div>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Detailed Data Section -->
+        <section class="section" id="details">
+            <h2 class="section-title">Detailed Analysis</h2>
+            <p class="section-subtitle">Comprehensive data breakdown by region, product, and customer segment</p>
+            
+            <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-weight: 600;">Regional Performance Breakdown</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Region</th>
+                        <th>Revenue</th>
+                        <th>Growth Rate</th>
+                        <th>Market Share</th>
+                        <th>Customer Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>North America</strong></td>
+                        <td>$1,125,000</td>
+                        <td>28%</td>
+                        <td>45%</td>
+                        <td>4,250</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Europe</strong></td>
+                        <td>$875,000</td>
+                        <td>19%</td>
+                        <td>35%</td>
+                        <td>3,100</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Asia-Pacific</strong></td>
+                        <td>$375,000</td>
+                        <td>52%</td>
+                        <td>15%</td>
+                        <td>3,200</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Other Regions</strong></td>
+                        <td>$125,000</td>
+                        <td>12%</td>
+                        <td>5%</td>
+                        <td>1,900</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-weight: 600;">Product Category Performance</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Units Sold</th>
+                        <th>Revenue</th>
+                        <th>Avg Price</th>
+                        <th>Margin</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Premium Services</strong></td>
+                        <td>8,450</td>
+                        <td>$1,690,000</td>
+                        <td>$200</td>
+                        <td>42%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Standard Services</strong></td>
+                        <td>22,100</td>
+                        <td>$663,000</td>
+                        <td>$30</td>
+                        <td>28%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Add-ons & Extras</strong></td>
+                        <td>15,300</td>
+                        <td>$147,000</td>
+                        <td>$9.60</td>
+                        <td>65%</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="export-buttons">
+                <button class="export-btn" onclick="exportData('csv')">📥 Export as CSV</button>
+                <button class="export-btn" onclick="exportData('json')">📥 Export as JSON</button>
+                <button class="export-btn" onclick="printReport()">🖨️ Print Report</button>
+                <button class="export-btn" onclick="shareReport()">🔗 Share Report</button>
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="#overview">Overview</a>
+            <a href="#performance">Performance</a>
+            <a href="#insights">Insights</a>
+            <a href="#details">Details</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+        </div>
+        <p>&copy; 2024 Data Analytics Portfolio. All rights reserved.</p>
+        <p style="font-size: 0.85rem; margin-top: 1rem;">Last updated: January 13, 2024 | Data accuracy: 99.2%</p>
+    </footer>
+
+    <script>
+        // Chart.js configurations with data
+        const chartColors = {
+            primary: '#00d4d4',
+            secondary: '#ffa500',
+            accent1: '#ff6b6b',
+            accent2: '#51cf66',
+            accent3: '#4c6ef5'
+        };
+
+        // Revenue Trend Chart
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        new Chart(revenueCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: 'Revenue ($K)',
+                    data: [180, 195, 210, 225, 240, 260, 280, 300, 320, 340, 360, 380],
+                    borderColor: chartColors.primary,
+                    backgroundColor: 'rgba(0, 212, 212, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 5,
+                    pointBackgroundColor: chartColors.primary,
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: { font: { size: 12 }, color: '#666' }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#f0f0f0' },
+                        ticks: { color: '#666' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#666' }
+                    }
+                }
+            }
+        });
+
+        // Market Share Chart
+        const marketCtx = document.getElementById('marketChart').getContext('2d');
+        new Chart(marketCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['North America', 'Europe', 'Asia-Pacific', 'Other'],
+                datasets: [{
+                    data: [45, 35, 15, 5],
+                    backgroundColor: [
+                        chartColors.primary,
+                        chartColors.secondary,
+                        chartColors.accent1,
+                        chartColors.accent2
+                    ],
+                    borderColor: '#fff',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { font: { size: 12 }, color: '#666', padding: 15 }
+                    }
+                }
+            }
+        });
+
+        // Customer Segments Chart
+        const segmentCtx = document.getElementById('segmentChart').getContext('2d');
+        new Chart(segmentCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Premium', 'Standard', 'Basic', 'Trial'],
+                datasets: [{
+                    label: 'Customer Count',
+                    data: [2100, 5200, 3800, 1350],
+                    backgroundColor: [
+                        chartColors.primary,
+                        chartColors.secondary,
+                        chartColors.accent1,
+                        chartColors.accent2
+                    ],
+                    borderRadius: 8,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#f0f0f0' },
+                        ticks: { color: '#666' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#666' }
+                    }
+                }
+            }
+        });
+
+        // Regional Performance Chart
+        const regionalCtx = document.getElementById('regionalChart').getContext('2d');
+        new Chart(regionalCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Revenue', 'Growth', 'Satisfaction', 'Retention', 'Market Share'],
+                datasets: [{
+                    label: 'Performance Score',
+                    data: [85, 78, 92, 88, 75],
+                    borderColor: chartColors.primary,
+                    backgroundColor: 'rgba(0, 212, 212, 0.2)',
+                    borderWidth: 2,
+                    pointBackgroundColor: chartColors.primary,
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: { color: '#f0f0f0' },
+                        ticks: { color: '#666' }
+                    }
+                }
+            }
+        });
+
+        // Export functionality
+        function exportData(format) {
+            if (format === 'csv') {
+                const csv = 'Metric,Value,Change\nTotal Revenue,$2.5M,+23%\nGrowth Rate,45%,+8% YoY\nActive Users,12450,+3200\nSatisfaction Rate,92%,+5%';
+                downloadFile(csv, 'analytics-data.csv', 'text/csv');
+            } else if (format === 'json') {
+                const json = JSON.stringify({
+                    metrics: {
+                        revenue: '$2.5M',
+                        growth: '45%',
+                        users: 12450,
+                        satisfaction: '92%'
+                    },
+                    timestamp: new Date().toISOString()
+                }, null, 2);
+                downloadFile(json, 'analytics-data.json', 'application/json');
+            }
+        }
+
+        function downloadFile(content, filename, type) {
+            const blob = new Blob([content], { type });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }
+
+        function printReport() {
+            window.print();
+        }
+
+        function shareReport() {
+            const url = window.location.href;
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Data Analytics Portfolio',
+                    text: 'Check out this interactive analytics showcase',
+                    url: url
+                });
+            } else {
+                alert('Share link: ' + url);
+            }
+        }
+    </script>
+</body>
+</html>
