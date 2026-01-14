@@ -1,4 +1,4 @@
-name: Deploy static site to GitHub Pages
+name: Deploy static site to GitHub Pages (gh-pages branch)
 on:
   push:
     branches: ["main"]
@@ -29,30 +29,18 @@ jobs:
         run: |
           set -eux
           SITE_DIR="_site"
-          rm -rf $SITE_DIR
+          rm -rf "$SITE_DIR"
           if [ -f ./client/package.json ]; then
-            echo "Detected client/package.json — building client..."
+            echo "Building client..."
             cd client
             pnpm install --frozen-lockfile
             pnpm build
-            if [ -d "dist" ]; then
-              cp -R dist ../$SITE_DIR
-            elif [ -d "build" ]; then
-              cp -R build ../$SITE_DIR
-            else
-              echo "Warning: no dist/ or build/ produced in client/"; mkdir -p ../$SITE_DIR
-            fi
+            if [ -d dist ]; then cp -R dist ../"$SITE_DIR"; elif [ -d build ]; then cp -R build ../"$SITE_DIR"; else mkdir -p ../"$SITE_DIR"; fi
           else
             echo "Building from repo root..."
             pnpm install --frozen-lockfile
             pnpm build
-            if [ -d "dist" ]; then
-              cp -R dist $SITE_DIR
-            elif [ -d "build" ]; then
-              cp -R build $SITE_DIR
-            else
-              echo "Warning: no dist/ or build/ produced at repo root"; mkdir -p $SITE_DIR
-            fi
+            if [ -d dist ]; then cp -R dist "$SITE_DIR"; elif [ -d build ]; then cp -R build "$SITE_DIR"; else mkdir -p "$SITE_DIR"; fi
           fi
 
       - name: Add CNAME for custom domain
@@ -60,15 +48,11 @@ jobs:
           mkdir -p _site
           echo "www.zacheryannancy.com" > _site/CNAME
 
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v3
-
-      # Replace upload-pages-artifact (or any upload step) with upload-artifact@v4
-      - name: Upload Pages artifact (compatible)
-        uses: actions/upload-artifact@v4
+      - name: Publish to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          name: pages
-          path: _site
-
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v1
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
+          publish_branch: gh-pages
+          # optional: user name/email used for commit
+          commit_message: Deploy site via Actions
