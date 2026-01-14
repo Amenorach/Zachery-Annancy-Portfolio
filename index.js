@@ -412,8 +412,8 @@ var TITLE_MAX_LENGTH = 1200;
 var CONTENT_MAX_LENGTH = 2e4;
 var trimValue = (value) => value.trim();
 var isNonEmptyString2 = (value) => typeof value === "string" && value.trim().length > 0;
-var buildEndpointUrl = (baseUrl) => {
-  const normalizedBase = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
+var buildEndpointUrl = (baseUrl2) => {
+  const normalizedBase = baseUrl2.endsWith("/") ? baseUrl2 : `${baseUrl2}/`;
   return new URL(
     "webdevtoken.v1.WebDevService/SendNotification",
     normalizedBase
@@ -598,8 +598,10 @@ import path from "path";
 import { defineConfig } from "vite";
 import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
 var plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime()];
+var baseUrl = process.env.BASE_URL ?? "/";
 var vite_config_default = defineConfig({
   plugins,
+  base: baseUrl,
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "client", "src"),
