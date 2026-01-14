@@ -4,7 +4,7 @@ on:
     branches: ["main"]
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -26,6 +26,8 @@ jobs:
           corepack prepare pnpm@latest --activate
 
       - name: Install & Build (monorepo-aware)
+        env:
+          BASE_URL: "/Zachery-Annancy-Portfolio/"
         run: |
           set -eux
           SITE_DIR="_site"
