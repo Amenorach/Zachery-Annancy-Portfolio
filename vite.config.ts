@@ -9,8 +9,11 @@ import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
 
 const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime()];
 
+const baseUrl = process.env.BASE_URL ?? "/";
+
 export default defineConfig({
   plugins,
+  base: baseUrl,
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "client", "src"),
