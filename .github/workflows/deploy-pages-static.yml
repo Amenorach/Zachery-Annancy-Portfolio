@@ -30,7 +30,6 @@ jobs:
           set -eux
           SITE_DIR="_site"
           rm -rf $SITE_DIR
-          # If there is a client subproject, build it there and copy output to _site
           if [ -f ./client/package.json ]; then
             echo "Detected client/package.json — building client..."
             cd client
@@ -58,16 +57,17 @@ jobs:
 
       - name: Add CNAME for custom domain
         run: |
-          # Ensure _site exists and write CNAME for GitHub Pages
           mkdir -p _site
           echo "www.zacheryannancy.com" > _site/CNAME
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v3
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v1
+      # Replace upload-pages-artifact (or any upload step) with upload-artifact@v4
+      - name: Upload Pages artifact (compatible)
+        uses: actions/upload-artifact@v4
         with:
+          name: pages
           path: _site
 
       - name: Deploy to GitHub Pages
